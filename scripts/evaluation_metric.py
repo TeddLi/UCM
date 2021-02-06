@@ -2,9 +2,9 @@ import sys
 import json
 from collections import defaultdict
 
-by_label_match = {"Reject": 0, "Accept": 0, "No Decision Yet": 0}
-by_label_auto = {"Reject": 0, "Accept": 0, "No Decision Yet": 0}
-by_label_gold = {"Reject": 0, "Accept": 0, "No Decision Yet": 0}
+by_label_match = {"Reject": 0, "Accept": 0, "Neutral": 0}
+by_label_auto = {"Reject": 0, "Accept": 0, "Neutral": 0}
+by_label_gold = {"Reject": 0, "Accept": 0, "Neutral": 0}
 
 match = 0
 exact_match = 0
@@ -14,13 +14,13 @@ total_gold = 0
 total_auto = 0
 
 answers = {}
-for line in open('dstc8-task3.gold.txt','r'):
+for line in open('Goldenlabel.txt','r'):
     num = int(line.strip().split()[0])
     total += 1
     if 'No Decision Yet' in line:
-        answers[num] = [(-1, "No Decision Yet")]
+        answers[num] = [(-1, "Neutral")]
         total_gold += 1
-        by_label_gold["No Decision Yet"] += 1
+        by_label_gold["Neutral"] += 1
     else:
         for part in line.strip().split()[1:]:
             total_gold += 1
@@ -34,7 +34,7 @@ nums_dict = defaultdict(int)
 start_index = 0
 cur_index =0
 cur_id = 0
-for line in open('3', 'r'):
+for line in open('output.txt', 'r'):
     id, sent_num, i_predicted_target, gold = line.split('\t')
     if int(id) not in output:
         output[int(id)] = []
@@ -44,7 +44,7 @@ for line in open('3', 'r'):
         nums_dict[int(id)] += int(i_predicted_target)
 
     if cur_index - int(sent_num) +1 == start_index and nums_dict[int(id)] ==0:
-        output[int(id)].append((-1, "No Decision Yet"))
+        output[int(id)].append((-1, "Neutral"))
     cur_index+=1
 
 
@@ -54,7 +54,6 @@ for line in open('3', 'r'):
 
 compare = output.copy()
 
-# compare = json.load(sys.stdin)
 for id, value in compare.items():
     num = id
     gold = answers[num]
@@ -78,5 +77,5 @@ r = 100 * match / total_gold
 f = 2 * p * r / (p + r)
 exact = 100 * exact_match / total
 
-print("{:.1f} & {:.1f} & {:.1f} & {:.1f} \\\\".format(exact, p, r, f))
+print("Acc {:.1f} Micro-P {:.1f} & Micro-R {:.1f} & Micro-F {:.1f} \\\\".format(exact, p, r, f))
 

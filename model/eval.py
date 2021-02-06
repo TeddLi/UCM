@@ -6,6 +6,7 @@ import sys
 import time
 import datetime
 import operator
+from os.path import dirname
 from collections import defaultdict
 from model import data_helpers
 
@@ -48,7 +49,14 @@ target_loss_weight=[1.0,1.0]
 
 print("\nEvaluating...\n")
 
-checkpoint_file = tf.train.latest_checkpoint(FLAGS.checkpoint_dir)
+current_path = os.path.abspath(__file__)
+father_path = dirname(dirname(current_path))
+
+
+
+# checkpoint_file = tf.train.latest_checkpoint(FLAGS.checkpoint_dir)
+checkpoint_file = os.path.join(father_path,'scripts/runs/restore/model-69000')
+
 print(checkpoint_file)
 # pdb.set_trace()
 graph = tf.Graph()

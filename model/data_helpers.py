@@ -51,41 +51,6 @@ def to_vec(tokens, vocab, maxlen):
 
     return length, np.array(vec)
 
-def process_dialog(dialog, data_type):
-
-    # 1. Create the context (a list of utterances)
-    utterances_id = dialog['example-id']
-
-    context = dialog['messages-so-far']
-    utterances = []
-    utterances_speaker = []
-    if data_type == "train":
-        for i in range(len(context)):
-            # utterances
-            if i < (len(context) - 1):
-                if context[i]['speaker'] == context[i+1]['speaker']:
-                    utterances.append(context[i]['message'].lower() + " __eou__")
-                else:
-                    utterances.append(context[i]['message'].lower() + " __eou__ __eot__")
-            else:
-                    utterances.append(context[i]['message'].lower() + " __eou__ __eot__")
-            # utterances_speaker
-            utterances_speaker.append(context[i]['speaker'])
-
-    elif data_type == "valid":
-        for i in range(len(context)):
-            # utterances
-            if i < (len(context) - 1):
-                if context[i]['speaker'] == context[i+1]['speaker']:
-                    utterances.append(context[i]['utterance'].lower() + " __eou__")
-                else:
-                    utterances.append(context[i]['utterance'].lower() + " __eou__ __eot__")
-            else:
-                    utterances.append(context[i]['utterance'].lower() + " __eou__ __eot__")
-            # utterances_speaker
-            utterances_speaker.append(context[i]['speaker'])
-
-    assert len(utterances) == len(utterances_speaker)
 
 
     # 2. create the label
@@ -184,11 +149,10 @@ def batch_iter(data, batch_size, num_epochs, target_loss_weights, max_utter_len,
     Generates a batch iterator for a dataset.
     """
     data_size = len(data)
-    num_batches_per_epoch = int(len(data)/batch_size)# + 1
+    num_batches_per_epoch = int(len(data)/batch_size) + 1
     for epoch in range(num_epochs):
         # Shuffle the data at each epoch
         if shuffle:
-
             random.Random(epoch).shuffle(data)
         for batch_num in range(num_batches_per_epoch):
             start_index = batch_num * batch_size
