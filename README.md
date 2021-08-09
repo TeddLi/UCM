@@ -43,3 +43,15 @@ python evaluation_metric.py
 cd scripts
 bash train_ucm.sh
 ```
+
+
+## Cite
+@INPROCEEDINGS{9413654,
+  author={Li, Tianda and Gu, Jia-Chen and Liu, Hui and Liu, Quan and Ling, Zhen-Hua and Su, Zhiming and Zhu, Xiaodan},
+  booktitle={ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
+  title={Have You Made a Decision? Where? A Pilot Study on Interpretability of Polarity Analysis Based on Advising Problem}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={6928-6932},
+  doi={10.1109/ICASSP39728.2021.9413654}}
